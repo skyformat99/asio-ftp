@@ -11,7 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\ftpserver\common.cpp" />
     <ClCompile Include="..\..\ftpserver\ftpserver.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\ftpserver\common.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E575B99B-749E-46F3-A2DF-4F48FD64702B}</ProjectGuid>
