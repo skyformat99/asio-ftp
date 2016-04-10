@@ -3,6 +3,17 @@
 #include <strstream>
 #include <regex>
 #include <boost/lexical_cast.hpp>
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/sinks/text_file_backend.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/sources/record_ostream.hpp>
+#include <boost/date_time/posix_time/posix_time_types.hpp>
+#include <boost/log/support/date_time.hpp>
 
 const std::wstring s2ws(const std::string& src)
 {
@@ -112,4 +123,37 @@ std::vector<std::string> stringsplit(std::string strSrc, const std::string& spli
 		vec.push_back(*pos);
 	}
 	return vec;
+}
+
+
+bool g_nInitLog = false;
+namespace logging = boost::log;
+namespace sinks = boost::log::sinks;
+namespace src = boost::log::sources;
+namespace expr = boost::log::expressions;
+namespace attrs = boost::log::attributes;
+namespace keywords = boost::log::keywords;
+void InitLog()
+{
+	//输出到文件
+	auto pSink = logging::add_file_log
+		(
+		keywords::open_mode = std::ios::app,  //重启程序不删除日志
+		keywords::file_name = "log/videosnapshow_%N.log",
+		keywords::rotation_size = 10 * 1024 * 1024,       //超过此大小自动建立新文件
+		// keywords::time_based_rotation=sinks::file::rotation_at_time_point(0,0,0),   //每隔指定时间重建新文件
+		// This makes the sink to write log records that look like this:
+		keywords::format =
+		(
+		expr::stream
+		<< expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f")
+		<< " " << expr::attr< boost::log::aux::thread::id >("ThreadID")
+		<< ": <" << logging::trivial::severity
+		<< "> " << expr::smessage
+		)
+		);
+	pSink->locked_backend()->auto_flush(true);//使日志实时更新  
+	//pSink->imbue(std::locale("zh_CN.UTF-8")); // 本地化   
+	logging::add_console_log();
+	logging::add_common_attributes();
 }

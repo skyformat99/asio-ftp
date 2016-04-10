@@ -8,3 +8,5 @@ const std::wstring utf8_2_ws(const std::string& src);
 const std::string utf8_2_s(const std::string& str);
 bool StringToInt(const std::string& str, int& n);
 std::vector<std::string> stringsplit(std::string strSrc, const std::string& split);
+void InitLog();
+extern bool g_nInitLog;

@@ -20,12 +20,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ftpserver\common.cpp" />
+    <ClCompile Include="..\..\ftpserver\connection.cpp" />
+    <ClCompile Include="..\..\ftpserver\connection_manager.cpp" />
     <ClCompile Include="..\..\ftpserver\ftpserver.cpp" />
     <ClCompile Include="..\..\ftpserver\json.cpp" />
+    <ClCompile Include="..\..\ftpserver\mime_types.cpp" />
+    <ClCompile Include="..\..\ftpserver\reply.cpp" />
+    <ClCompile Include="..\..\ftpserver\request_handler.cpp" />
+    <ClCompile Include="..\..\ftpserver\request_parser.cpp" />
+    <ClCompile Include="..\..\ftpserver\server.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ftpserver\common.h" />
+    <ClInclude Include="..\..\ftpserver\connection.hpp" />
+    <ClInclude Include="..\..\ftpserver\connection_manager.hpp" />
+    <ClInclude Include="..\..\ftpserver\header.hpp" />
     <ClInclude Include="..\..\ftpserver\json.h" />
+    <ClInclude Include="..\..\ftpserver\mime_types.hpp" />
+    <ClInclude Include="..\..\ftpserver\reply.hpp" />
+    <ClInclude Include="..\..\ftpserver\request.hpp" />
+    <ClInclude Include="..\..\ftpserver\request_handler.hpp" />
+    <ClInclude Include="..\..\ftpserver\request_parser.hpp" />
+    <ClInclude Include="..\..\ftpserver\server.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E575B99B-749E-46F3-A2DF-4F48FD64702B}</ProjectGuid>
@@ -117,12 +133,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\;D:\SOFT\boost_1_60_0\boost_1_60_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\CODE\boost_1_60_0\boost_1_60_0;..\..\;D:\SOFT\boost_1_60_0\boost_1_60_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\SOFT\boost_1_60_0\boost_1_60_0\stage\lib-w64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\CODE\boost_1_60_0\boost_1_60_0\stage\lib-64;D:\SOFT\boost_1_60_0\boost_1_60_0\stage\lib-w64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
