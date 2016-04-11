@@ -139,7 +139,7 @@ void InitLog()
 	auto pSink = logging::add_file_log
 		(
 		keywords::open_mode = std::ios::app,  //重启程序不删除日志
-		keywords::file_name = "log/videosnapshow_%N.log",
+		keywords::file_name = "log/ftpserver_%N.log",
 		keywords::rotation_size = 10 * 1024 * 1024,       //超过此大小自动建立新文件
 		// keywords::time_based_rotation=sinks::file::rotation_at_time_point(0,0,0),   //每隔指定时间重建新文件
 		// This makes the sink to write log records that look like this:
