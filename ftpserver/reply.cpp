@@ -12,7 +12,7 @@
 #include <string>
 #include <boost/lexical_cast.hpp>
 
-namespace http {
+namespace ftp {
 namespace server {
 
 namespace status_strings {

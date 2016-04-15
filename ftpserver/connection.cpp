@@ -14,7 +14,7 @@
 #include "connection_manager.hpp"
 #include "request_handler.hpp"
 
-namespace http {
+namespace ftp {
 namespace server {
 
 connection::connection(boost::asio::io_service& io_service,

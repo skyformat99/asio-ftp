@@ -12,7 +12,7 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 
-namespace http {
+namespace ftp {
 namespace server {
 
 void connection_manager::start(connection_ptr c)

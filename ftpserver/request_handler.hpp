@@ -14,7 +14,7 @@
 #include <string>
 #include <boost/noncopyable.hpp>
 
-namespace http {
+namespace ftp {
 namespace server {
 
 struct reply;

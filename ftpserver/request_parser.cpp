@@ -11,7 +11,7 @@
 #include "request_parser.hpp"
 #include "request.hpp"
 
-namespace http {
+namespace ftp {
 namespace server {
 
 request_parser::request_parser()

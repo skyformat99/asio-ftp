@@ -14,7 +14,7 @@
 #include <boost/logic/tribool.hpp>
 #include <boost/tuple/tuple.hpp>
 
-namespace http {
+namespace ftp {
 namespace server {
 
 struct request;

@@ -16,7 +16,7 @@
 #include <boost/asio.hpp>
 #include "header.hpp"
 
-namespace http {
+namespace ftp {
 namespace server {
 
 /// A reply to be sent to a client.

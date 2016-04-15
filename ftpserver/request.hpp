@@ -15,7 +15,7 @@
 #include <vector>
 #include "header.hpp"
 
-namespace http {
+namespace ftp {
 namespace server {
 
 /// A request received from a client.

@@ -15,7 +15,7 @@
 #include <boost/noncopyable.hpp>
 #include "connection.hpp"
 
-namespace http {
+namespace ftp {
 namespace server {
 
 /// Manages open connections so that they may be cleanly stopped when the server

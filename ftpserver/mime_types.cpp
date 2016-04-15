@@ -10,7 +10,7 @@
 
 #include "mime_types.hpp"
 
-namespace http {
+namespace ftp {
 namespace server {
 namespace mime_types {
 
