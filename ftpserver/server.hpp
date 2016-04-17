@@ -52,7 +52,8 @@ namespace ftp
 			connection_ptr new_connection_;
 
 			/// The handler for all incoming requests.
-			request_handler request_handler_;
+		//	request_handler request_handler_;
+			std::string m_strFtpDir;
 		};
 
 	} // namespace server

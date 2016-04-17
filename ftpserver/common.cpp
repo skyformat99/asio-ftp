@@ -127,14 +127,16 @@ std::vector<std::string> stringsplit(std::string strSrc, const std::string& spli
 
 
 bool g_nInitLog = false;
-namespace logging = boost::log;
-namespace sinks = boost::log::sinks;
-namespace src = boost::log::sources;
-namespace expr = boost::log::expressions;
-namespace attrs = boost::log::attributes;
-namespace keywords = boost::log::keywords;
 void InitLog()
 {
+	namespace logging = boost::log;
+	namespace sinks = boost::log::sinks;
+	namespace src = boost::log::sources;
+	namespace expr = boost::log::expressions;
+	namespace attrs = boost::log::attributes;
+	namespace keywords = boost::log::keywords;
+
+
 	//输出到文件
 	auto pSink = logging::add_file_log
 		(

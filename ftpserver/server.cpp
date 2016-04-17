@@ -1,12 +1,4 @@
-//
-// server.cpp
-// ~~~~~~~~~~
-//
-// Copyright (c) 2003-2015 Christopher M. Kohlhoff (chris at kohlhoff dot com)
-//
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
+
 
 #include "server.hpp"
 #include <boost/bind.hpp>
@@ -22,7 +14,7 @@ namespace ftp {
 			acceptor_(io_service_),
 			connection_manager_(),
 			new_connection_(),
-			request_handler_(doc_root)
+			m_strFtpDir(doc_root)
 		{
 			// Register to handle the signals that indicate when the server should exit.
 			// It is safe to register for the same signal multiple times in a program,
@@ -58,7 +50,7 @@ namespace ftp {
 		void server::start_accept()
 		{
 			new_connection_.reset(new connection(io_service_,
-				connection_manager_, request_handler_));
+				connection_manager_, m_strFtpDir));
 			acceptor_.async_accept(new_connection_->socket(),
 				boost::bind(&server::handle_accept, this,
 				boost::asio::placeholders::error));
