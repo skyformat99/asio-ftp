@@ -8,13 +8,13 @@ namespace ftp {
 	namespace server {
 
 		server::server(const std::string& address, const std::string& port,
-			const std::string& doc_root)
+			const std::string& ftp_root)
 			: io_service_(),
 			signals_(io_service_),
 			acceptor_(io_service_),
 			connection_manager_(),
 			new_connection_(),
-			m_strFtpDir(doc_root)
+			m_strFtpDir(ftp_root)
 		{
 			// Register to handle the signals that indicate when the server should exit.
 			// It is safe to register for the same signal multiple times in a program,

@@ -60,78 +60,90 @@ namespace ftp {
 			getline(is, s);
 			if (s.size() > 0)
 			{
+				std::string strRep = "331 Please input password";
+				request_handler_.handle_request(s, strRep);
+				strRep.append("\r\n");
 				//console.read_line(s);
 
 				if (socket_.is_open())
 				{
+					//一行。同步写即可
+					boost::system::error_code ec;
+					boost::asio::write(socket_, boost::asio::buffer(strRep), ec);
+					if (ec)
+					{
+						BOOST_LOG_TRIVIAL(error) <<	ec.message() << " " << __FILE__ << __FUNCTION__ << __LINE__;
+						return;
+					}
+
 					boost::asio::async_read_until(socket_, buf, "\n",
 						boost::bind(&connection::handle_read_line, shared_from_this()));
 				}
 			}
 		}
 
-		void connection::handle_read(const boost::system::error_code& e,
-			std::size_t bytes_transferred)
-		{
-			if (!e)
-			{
-				boost::tribool result;
-				boost::tie(result, boost::tuples::ignore) = request_parser_.parse(
-					request_, buffer_.data(), buffer_.data() + bytes_transferred);
+		//void connection::handle_read(const boost::system::error_code& e,
+		//	std::size_t bytes_transferred)
+		//{
+		//	if (!e)
+		//	{
+		//		boost::tribool result;
+		//		boost::tie(result, boost::tuples::ignore) = request_parser_.parse(
+		//			request_, buffer_.data(), buffer_.data() + bytes_transferred);
 
-				if (result)
-				{
-					request_handler_.handle_request(request_, reply_);
-					boost::asio::async_write(socket_, reply_.to_buffers(),
-						boost::bind(&connection::handle_write, shared_from_this(),
-						boost::asio::placeholders::error,
-						boost::asio::placeholders::bytes_transferred));
-				}
-				else if (!result)
-				{
-					reply_ = reply::stock_reply(reply::bad_request);
-					boost::asio::async_write(socket_, reply_.to_buffers(),
-						boost::bind(&connection::handle_write, shared_from_this(),
-						boost::asio::placeholders::error,
-						boost::asio::placeholders::bytes_transferred));
-				}
-				else
-				{
-					socket_.async_read_some(boost::asio::buffer(buffer_),
-						boost::bind(&connection::handle_read, shared_from_this(),
-						boost::asio::placeholders::error,
-						boost::asio::placeholders::bytes_transferred));
-				}
-			}
-			else if (e != boost::asio::error::operation_aborted)
-			{
-				connection_manager_.stop(shared_from_this());
-			}
-		}
+		//		if (result)
+		//		{
+		//			request_handler_.handle_request(request_, reply_);
+		//			boost::asio::async_write(socket_, reply_.to_buffers(),
+		//				boost::bind(&connection::handle_write, shared_from_this(),
+		//				boost::asio::placeholders::error,
+		//				boost::asio::placeholders::bytes_transferred));
+		//		}
+		//		else if (!result)
+		//		{
+		//			reply_ = reply::stock_reply(reply::bad_request);
+		//			boost::asio::async_write(socket_, reply_.to_buffers(),
+		//				boost::bind(&connection::handle_write, shared_from_this(),
+		//				boost::asio::placeholders::error,
+		//				boost::asio::placeholders::bytes_transferred));
+		//		}
+		//		else
+		//		{
+		//			socket_.async_read_some(boost::asio::buffer(buffer_),
+		//				boost::bind(&connection::handle_read, shared_from_this(),
+		//				boost::asio::placeholders::error,
+		//				boost::asio::placeholders::bytes_transferred));
+		//		}
+		//	}
+		//	else if (e != boost::asio::error::operation_aborted)
+		//	{
+		//		connection_manager_.stop(shared_from_this());
+		//	}
+		//}
 
-		void connection::handle_write(const boost::system::error_code& e, std::size_t bytes_transferred)
-		{
+		//void connection::handle_write(const boost::system::error_code& e, std::size_t bytes_transferred)
+		//{
 
-			if (!e)
-			{
-				// Initiate graceful connection closure.
-				boost::system::error_code ignored_ec;
-				socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ignored_ec);
-			}
+		//	if (!e)
+		//	{
+		//		// Initiate graceful connection closure.
+		//		boost::system::error_code ignored_ec;
+		//		socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ignored_ec);
+		//	}
 
-			if (e != boost::asio::error::operation_aborted)
-			{
-				connection_manager_.stop(shared_from_this());
-			}
-		}
+		//	if (e != boost::asio::error::operation_aborted)
+		//	{
+		//		connection_manager_.stop(shared_from_this());
+		//	}
+		//}
 		void connection::handle_write_welcome(const boost::system::error_code& e, std::size_t bytes_transferred)
 		{
 			//error
 			if (e)
 			{
 				BOOST_LOG_TRIVIAL(error) << e.message()<<" "<< __FILE__ <<  __FUNCTION__ <<__LINE__;
-				boost::system::error_code ignored_ec;
-				socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ignored_ec);
+				boost::system::error_code ec;
+				socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ec);
 				connection_manager_.stop(shared_from_this());
 				return;
 			}

@@ -47,12 +47,12 @@ namespace ftp {
 
 		private:
 			/// Handle completion of a read operation.
-			void handle_read(const boost::system::error_code& e,
-				std::size_t bytes_transferred);
+			//void handle_read(const boost::system::error_code& e,
+			//	std::size_t bytes_transferred);
 			void handle_read_line();
 
 			/// Handle completion of a write operation.
-			void handle_write(const boost::system::error_code& e, std::size_t bytes_transferred);
+			//void handle_write(const boost::system::error_code& e, std::size_t bytes_transferred);
 
 			/// Handle completion of writting a welcome message.
 			void handle_write_welcome(const boost::system::error_code& e, std::size_t bytes_transferred);
@@ -67,16 +67,16 @@ namespace ftp {
 			request_handler request_handler_;
 
 			/// Buffer for incoming data.
-			boost::array<char, 8192> buffer_;
+			//boost::array<char, 8192> buffer_;
 
 			/// The incoming request.
-			request request_;
+		//	request request_;
 
 			/// The parser for the incoming request.
-			request_parser request_parser_;
+		//	request_parser request_parser_;
 
 			/// The reply to be sent back to the client.
-			reply reply_;
+		//	reply reply_;
 
 			std::string m_strMyWelcome;
 			boost::asio::streambuf buf;
