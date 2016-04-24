@@ -8,6 +8,7 @@ namespace ftp {
 
 		struct reply;
 		struct request;
+		class connection;
 
 		/// The common handler for all incoming requests.
 		class request_handler
@@ -15,18 +16,21 @@ namespace ftp {
 		{
 		public:
 			/// Construct with a directory containing files to be served.
-			explicit request_handler(const std::string& doc_root);
+			explicit request_handler(const std::string& ftp_root);
 
 			/// Handle a request and produce a reply.
-			void handle_request(const std::string& req, std::string& rep);
+			void handle_request(const std::string& req, connection *pConnection);
 
 		private:
 			/// The directory containing the files to be served.
-			std::string doc_root_;
+			std::string m_strFtpRoot;
 
 			/// Perform URL-decoding on a string. Returns false if the encoding was
 			/// invalid.
-			static bool url_decode(const std::string& in, std::string& out);
+		//	static bool url_decode(const std::string& in, std::string& out);
+		public:
+			std::string m_strUserName;
+			std::string m_strPwd;
 		};
 
 	} // namespace server

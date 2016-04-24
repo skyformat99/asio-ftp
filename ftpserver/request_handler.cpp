@@ -13,20 +13,95 @@
 #include <sstream>
 #include <string>
 #include <boost/lexical_cast.hpp>
+#include <boost/log/trivial.hpp>
 #include "mime_types.hpp"
 #include "reply.hpp"
 #include "request.hpp"
+#include "connection.hpp"
 
 namespace ftp {
 	namespace server {
 
-		request_handler::request_handler(const std::string& doc_root)
-			: doc_root_(doc_root)
+		request_handler::request_handler(const std::string& ftp_root)
+			: m_strFtpRoot(ftp_root)
 		{
 		}
 
-		void request_handler::handle_request(const std::string& req, std::string& rep)
+		void request_handler::handle_request(const std::string& req, connection *pConnection)
 		{
+			std::string rep;
+			BOOST_LOG_TRIVIAL(info) << "receive message " << req;
+			std::stringstream stream(req);
+			std::string command;
+			stream >> command;
+			if (command == "USER") 
+			{
+				std::string username;
+				stream >> username;
+				m_strUserName = username;
+				rep = "331 please input password";
+				pConnection->WriteMessage(rep);
+				return;
+			}
+			else if (command == "PASS") 
+			{
+				std::string password;
+				stream >> password;
+				m_strPwd = password;
+				if (m_strUserName.length() == 0)
+				{
+					rep = "503 Login with USER first.";
+					pConnection->WriteMessage(rep);
+					return;
+				}
+				//if account and password is right
+				if (m_strUserName == "a" && m_strPwd == "a")
+				{
+					rep = "230 User successfully logged in.";
+					pConnection->WriteMessage(rep);
+					return;
+				}
+				else
+				{
+					rep = "530 Not logged in, user or password incorrect!";
+					//disconnected all 
+					pConnection->WriteMessage(rep);
+					return;
+				}
+			}
+			else if (command == "PWD") 
+			{
+				//result = session.get_working_directory();
+			}
+			else if (command == "LIST") //¶ÔÓ¦ÃüÁîdir
+			{
+				rep = "150 Opening ASCII mode data connection for directory list.";
+			//	session.list(boost::bind(&write_result, _1, write_message));
+				pConnection->WriteMessage(rep);
+				//rep = "226 Transfer complete.";
+				//	session.list(boost::bind(&write_result, _1, write_message));
+				//pConnection->WriteMessage(rep);
+				return;
+			}
+			//
+			else
+			{
+				// dummy instruction
+				if (command == "NOOP")
+				{
+					rep = "200 OK";
+				}
+				else
+				{
+					rep = "502 Command not implemented.";
+				}
+			}
+
+
+
+
+
+
 			//// Decode url to path.
 			//std::string request_path;
 			//if (!url_decode(req.uri, request_path))
@@ -79,7 +154,7 @@ namespace ftp {
 			//rep.headers[1].value = mime_types::extension_to_type(extension);
 		}
 
-		bool request_handler::url_decode(const std::string& in, std::string& out)
+		/*bool request_handler::url_decode(const std::string& in, std::string& out)
 		{
 			out.clear();
 			out.reserve(in.size());
@@ -116,7 +191,7 @@ namespace ftp {
 				}
 			}
 			return true;
-		}
+		}*/
 
 	} // namespace server
 } // namespace http

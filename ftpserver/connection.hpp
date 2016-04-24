@@ -45,6 +45,8 @@ namespace ftp {
 			/// Stop all asynchronous operations associated with the connection.
 			void stop();
 
+			void WriteMessage(std::string& str);
+
 		private:
 			/// Handle completion of a read operation.
 			//void handle_read(const boost::system::error_code& e,
@@ -81,8 +83,8 @@ namespace ftp {
 			std::string m_strMyWelcome;
 			boost::asio::streambuf buf;
 
-			std::string m_strUsrName;
-			std::string m_strPassword;
+		//	std::string m_strUsrName;
+		//	std::string m_strPassword;
 		};
 
 		typedef boost::shared_ptr<connection> connection_ptr;

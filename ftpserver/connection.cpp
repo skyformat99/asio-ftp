@@ -53,6 +53,20 @@ namespace ftp {
 		{
 			socket_.close();
 		}
+		void connection::WriteMessage(std::string& str)
+		{
+			str.append("\r\n");
+			if (socket_.is_open())
+			{
+				boost::system::error_code ec;
+				boost::asio::write(socket_, boost::asio::buffer(str), ec);
+				if (ec)
+				{
+					BOOST_LOG_TRIVIAL(error) << ec.message() << " " << __FILE__ << __FUNCTION__ << __LINE__;
+					return;
+				}
+			}
+		}
 		void connection::handle_read_line()
 		{
 			std::istream is(&buf);
@@ -60,22 +74,12 @@ namespace ftp {
 			getline(is, s);
 			if (s.size() > 0)
 			{
-				std::string strRep = "331 Please input password";
-				request_handler_.handle_request(s, strRep);
-				strRep.append("\r\n");
+				request_handler_.handle_request(s, this);
+
 				//console.read_line(s);
 
 				if (socket_.is_open())
 				{
-					//一行。同步写即可
-					boost::system::error_code ec;
-					boost::asio::write(socket_, boost::asio::buffer(strRep), ec);
-					if (ec)
-					{
-						BOOST_LOG_TRIVIAL(error) <<	ec.message() << " " << __FILE__ << __FUNCTION__ << __LINE__;
-						return;
-					}
-
 					boost::asio::async_read_until(socket_, buf, "\n",
 						boost::bind(&connection::handle_read_line, shared_from_this()));
 				}
